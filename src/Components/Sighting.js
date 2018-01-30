@@ -1,10 +1,12 @@
 import React from 'react';
 
+import './Sighting.css';
+
 const sighting = (props) => {
     const sighting = props.sighting;
 
     return (
-        <div>
+        <div className="Sighting">
             <p>{sighting.id}</p>
             <p>{sighting.dateTime}</p>
             <p>{sighting.description}</p>
