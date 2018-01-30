@@ -1,3 +1,5 @@
+Works with https://github.com/Vincit/summer-2018/ 
+
 Yleiset vaatimukset
 
 * Asiakassovelluksella tulee voida listata kaikki havainnot ja lisätä uusia havaintoja. Operaatiot tulee kohdistaa tehtävänannossa kuvattuun palvelinsovellukseen.
