@@ -15,14 +15,18 @@ class App extends Component {
         console.log(response);
         this.setState({ sightings: response.data });
       });
+
+    axios.get('/species')
+      .then( response => {
+        console.log(response);
+        this.setState({ species: response.data });
+      });
   }  
 
   render() {
     return (
       <div>
-        <SightingsList 
-          sightings={this.state.sightings}
-          species={this.state.species}/>
+        <SightingsList sightings={this.state.sightings} />
       </div>
     );
   }

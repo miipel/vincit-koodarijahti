@@ -7,11 +7,11 @@ const sighting = (props) => {
 
     return (
         <div className={classes.Sighting}>
-            <p>{sighting.id}</p>
-            <p>{sighting.dateTime}</p>
-            <p>{sighting.description}</p>
-            <p>{sighting.species}</p>
-            <p>{sighting.count}</p>
+            <p>ID: {sighting.id}</p>
+            <p>Date and time: {sighting.dateTime}</p>
+            <p>Description: {sighting.description}</p>
+            <p>Species: {sighting.species}</p>
+            <p>Count: {sighting.count}</p>
         </div>
     );
 }
