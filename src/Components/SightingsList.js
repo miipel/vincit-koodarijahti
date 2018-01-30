@@ -1,6 +1,8 @@
 import React from 'react';
 import Sighting from './Sighting';
 
+import classes from './SightingsList.css';
+
 const sightingsList = (props) => {
     const sightings = props.sightings.map((sighting, id) => {
         return <Sighting 
@@ -9,7 +11,7 @@ const sightingsList = (props) => {
     });
 
     return (
-        <div>
+        <div className={classes.SightningsList}>
             {sightings}
         </div>
     );

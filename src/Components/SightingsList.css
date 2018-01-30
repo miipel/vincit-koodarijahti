@@ -1,0 +1,9 @@
+.SightingsList {
+  display: inline-block;
+  padding: 16px;
+  text-align: center;
+  height: 250px;
+  margin: 16px;
+  border: 1px solid black;
+  overflow: scroll;
+}

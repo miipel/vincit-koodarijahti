@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './App.css';
+import classes from './App.css';
 import SightingsList from './Components/SightingsList';
 
 class App extends Component {
@@ -25,7 +25,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className={classes.App}>
         <SightingsList sightings={this.state.sightings} />
       </div>
     );
