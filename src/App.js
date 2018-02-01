@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import classes from './App.css';
 import SightingsList from './Components/SightingsList';
-import SightingCreate from './Components/SightingCreate';
+//import SightingCreate from './Components/SightingCreate';
 import ValidateSighting from './Components/ValidateSighting';
 
 class App extends Component {
