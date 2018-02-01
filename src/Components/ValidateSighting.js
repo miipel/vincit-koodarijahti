@@ -1,8 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const validateSighting = (props) => {
-  const isValid = false;
+  const sightingName = props.text;
+  console.log(sightingName);
+  const validSpecies = Object.values([...props.species]);
+  console.log(validSpecies);
+  const isValid = validSpecies.includes(sightingName);
+  console.log(isValid);
 
   return (
     <div>
