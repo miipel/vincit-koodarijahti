@@ -1,19 +1,29 @@
 import React from 'react';
 import Sighting from './Sighting';
-
-import classes from './SightingsList.css';
+import { Table } from 'reactstrap';
 
 const sightingsList = (props) => {
     const sightings = props.sightings.map((sighting, id) => {
-        return <Sighting 
+        return <Sighting
             key={id}
             sighting={sighting} />
     });
 
     return (
-        <div className={classes.SightningsList}>
-            {sightings}
-        </div>
+        <Table>
+            <thead>
+                <tr>
+                    <th>Date and time</th>
+                    <th>Species</th>
+                    <th>Count</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {sightings}
+            </tbody>
+        </Table>
+
     );
 }
 

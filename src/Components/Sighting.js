@@ -1,18 +1,20 @@
 import React from 'react';
-
-import classes from './Sighting.css';
+import moment from 'moment';
 
 const sighting = (props) => {
+    
     const sighting = props.sighting;
+    moment.locale();
+    const dateTime = moment(sighting.dateTime).format('lll');
+
 
     return (
-        <div className={classes.Sighting}>
-            <p>ID: {sighting.id}</p>
-            <p>Date and time: {sighting.dateTime}</p>
-            <p>Description: {sighting.description}</p>
-            <p>Species: {sighting.species}</p>
-            <p>Count: {sighting.count}</p>
-        </div>
+        <tr>
+            <td>{dateTime}</td>
+            <td>{sighting.species}</td>
+            <td>{sighting.count}</td>
+            <td>{sighting.description}</td>
+        </tr>
     );
 }
 
