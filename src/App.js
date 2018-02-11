@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SightingsList from './Components/SightingsList';
-//import SightingCreate from './Components/SightingCreate';
+import SightingAdd from './Components/SightingAdd';
 import ValidateSighting from './Components/ValidateSighting';
+import { Container, Row, Col } from 'reactstrap';
 
 class App extends Component {
   state = {
     sightings: [],
     species: [],
-    textInput: ''
+    textInput: '',
   }
 
   componentDidMount() {
@@ -33,7 +34,18 @@ class App extends Component {
   render() {
     return (
       <div>
-        <SightingsList sightings={this.state.sightings} />
+        <Container>
+          <Row>
+            <Col xs="12" sm="8">
+              <SightingsList sightings={this.state.sightings} />
+            </Col>
+            <Col sm="4">
+              <SightingAdd />
+            </Col>
+          </Row>
+        </Container>
+
+
         <ValidateSighting
           text={this.state.textInput}
           species={this.state.species} />

@@ -1,0 +1,10 @@
+.form {
+    width: 1000px;
+    background-color: antiquewhite;
+    flex-flow: column;
+    align-items: center;
+    box-shadow: 0 2px 1px #ccc;
+    margin: auto;
+    padding: 20px 0;
+    
+}
