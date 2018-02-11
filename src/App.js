@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import SightingsList from './Components/SightingsList';
 import SightingForm from './Components/Form/SightingForm';
-import ValidateSighting from './Components/ValidateSighting';
+//import ValidateSighting from './Components/ValidateSighting';
 import { Container, Row, Col} from 'reactstrap';
 
 class App extends Component {
@@ -25,11 +25,6 @@ class App extends Component {
       });
   }
 
-  textChangedHandler = (event) => {
-    const input = event.target.value;
-    this.setState({ textInput: input });
-  }
-
   render() {
     return (
       <div>
@@ -43,15 +38,6 @@ class App extends Component {
             </Col>
           </Row>
         </Container>
-
-
-        <ValidateSighting
-          text={this.state.textInput}
-          species={this.state.species} />
-        <input
-          type="text"
-          onChange={this.textChangedHandler}
-          value={this.state.textInput} />
       </div>
     );
   }

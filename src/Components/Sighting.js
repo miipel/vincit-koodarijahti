@@ -1,13 +1,14 @@
 import React from 'react';
-import moment from 'moment';
+import Moment from 'moment'
+import momentLocalizer from 'react-widgets-moment';
+
+Moment.locale('fi');
+momentLocalizer();
 
 const sighting = (props) => {
     
     const sighting = props.sighting;
-    moment.locale();
-    const dateTime = moment(sighting.dateTime).format('lll');
-
-
+    const dateTime = Moment(sighting.dateTime).format('lll');
     return (
         <tr>
             <td>{dateTime}</td>
