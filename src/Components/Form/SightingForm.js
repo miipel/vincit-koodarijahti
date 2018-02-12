@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, FormFeedback, Jumbotron } from 'reactstrap';
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
@@ -117,6 +117,9 @@ class SightingForm extends Component {
     return (
       <div className="SightingForm">
         <Form onSubmit={this.addSightingHandler}>
+          <h3>
+            Add new sighting
+          </h3>
           <FormGroup row>
             <Label for="dateAndTime">Date and time</Label>
             <DateTimePicker

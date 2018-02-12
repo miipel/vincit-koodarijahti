@@ -12,7 +12,8 @@ const sightingsList = (props) => {
     });
 
     return (
-        <div>
+        <div className="SightingsList">
+            <h3>Seen</h3>
             <Table>
                 <thead>
                     <tr>
