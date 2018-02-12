@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
@@ -13,7 +13,7 @@ class SightingForm extends Component {
   state = {
     form: {
       dateTime: {
-        value: new Date(),
+        value: this.props.dateTime,
         valid: false
       },
       species: {
@@ -30,25 +30,44 @@ class SightingForm extends Component {
       }
 
     },
-    validSpecies: this.props.species
+    validSpecies: null
   }
 
   dateTimeInputChangedHandler = (value) => {
-    const updatedInput = {
-      ...this.state.form.dateTime
+    const updatedForm = {
+      ...this.state.form
     }
-    updatedInput.value = value;
-    console.log(updatedInput.value);
-
-    this.setState({ dateTime: updatedInput });
+    const updatedDateTime = updatedForm.dateTime;
+    updatedDateTime.value = value;
+    updatedDateTime.valid = this.checkDateTimeValidity(updatedDateTime.value);
+    updatedForm.dateTime = updatedDateTime;
+    this.setState({ form: updatedForm });
   }
 
-  checkSpeciesValidity = (event) => {
-    const sightingName = event.target.value;
-    const validSpecies = this.props.validSpecies;
+  checkDateTimeValidity(dateTimeInput) {
+    const dateTime = dateTimeInput;
+    const isValid = Moment(dateTime).isValid();
+    return isValid;
+  }
+
+  checkSpeciesValidity(sighting) {
+    const sightingName = sighting;
+    const validSpecies = this.props.species;
+    console.log(validSpecies);
     const isValid = validSpecies.reduce((current, next) => next.name === sightingName || current, false);
 
     return isValid;
+  }
+
+  speciesInputChangedHandler = (event) => {
+    const updatedForm = {
+      ...this.state.form
+    }
+    const updatedSpecies = updatedForm.species;
+    updatedSpecies.value = event.target.value;
+    updatedSpecies.valid = this.checkSpeciesValidity(updatedSpecies.value);
+    updatedForm.species = updatedSpecies;
+    this.setState({ form: updatedForm });
   }
 
   render() {
@@ -60,7 +79,7 @@ class SightingForm extends Component {
             <DateTimePicker
               id="dateAndTime"
               value={this.state.form.dateTime.value}
-              onChange={this.dateTimeInputChangedHandler} />
+              onChange={value => this.dateTimeInputChangedHandler(value)} />
           </FormGroup>
           <FormGroup row>
             <Label for="species">Species</Label>
@@ -68,7 +87,9 @@ class SightingForm extends Component {
               id="species"
               required
               type='text'
-              onChange={this.textChangedHandler} />
+              onChange={this.speciesInputChangedHandler}
+              valid={this.state.form.species.valid} />
+            <FormFeedback>Does not match any species!</FormFeedback>
           </FormGroup>
           <FormGroup row>
             <Label for="count">Count</Label>
@@ -84,7 +105,7 @@ class SightingForm extends Component {
               required
               type='textarea' />
           </FormGroup>
-          <Button disabled={false}>Submit</Button>
+          <Button>Add sighting</Button>
         </Form>
       </div>
     );

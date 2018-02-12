@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import SightingsList from './Components/SightingsList';
 import SightingForm from './Components/Form/SightingForm';
-//import ValidateSighting from './Components/ValidateSighting';
-import { Container, Row, Col} from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
+
+import './App.css';
 
 class App extends Component {
   state = {
@@ -14,27 +15,29 @@ class App extends Component {
   componentDidMount() {
     axios.get('/sightings')
       .then(response => {
-        console.log(response);
         this.setState({ sightings: response.data });
       });
 
     axios.get('/species')
       .then(response => {
-        console.log(response);
         this.setState({ species: response.data });
       });
   }
 
   render() {
+    console.log(this.state.species)
     return (
       <div>
-        <Container>
+        <h3 className="App">
+          Duck sightings
+        </h3>
+        <Container className="App">
           <Row>
             <Col xs="12" sm="8">
               <SightingsList sightings={this.state.sightings} />
             </Col>
             <Col sm="4">
-              <SightingForm species={this.state.species}/>
+              <SightingForm species={this.state.species} dateTime={new Date()} />
             </Col>
           </Row>
         </Container>
