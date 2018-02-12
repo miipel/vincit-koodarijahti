@@ -110,13 +110,10 @@ class SightingForm extends Component {
         .then(response => {
           this.setState({ serverResponse: response.data });
         });
-      console.log(this.state.serverResponse)
     }
-    console.log(formData)
   }
 
   render() {
-    console.log(this.state)
     return (
       <div className="SightingForm">
         <Form onSubmit={this.addSightingHandler}>
