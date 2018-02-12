@@ -92,8 +92,8 @@ class SightingForm extends Component {
     this.setState({ form: updatedForm });
   }
 
+
   addSightingHandler = (event) => {
-    event.preventDefault();
     const formData = {};
     for (let formElement in this.state.form) {
       formData[formElement] = this.state.form[formElement].value;
@@ -119,7 +119,7 @@ class SightingForm extends Component {
     console.log(this.state)
     return (
       <div className="SightingForm">
-        <Form>
+        <Form onSubmit={this.addSightingHandler}>
           <FormGroup row>
             <Label for="dateAndTime">Date and time</Label>
             <DateTimePicker
@@ -155,7 +155,7 @@ class SightingForm extends Component {
               onChange={this.descriptionInputHandler}
               valid={this.state.form.description.valid} />
           </FormGroup>
-          <Button onClick={this.addSightingHandler}>Add sighting</Button>
+          <Button>Add sighting</Button>
         </Form>
       </div>
     );
