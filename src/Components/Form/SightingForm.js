@@ -3,6 +3,7 @@ import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap'
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import axios from 'axios';
 
 import './SightingForm.css';
 
@@ -13,7 +14,7 @@ class SightingForm extends Component {
   state = {
     form: {
       dateTime: {
-        value: this.props.dateTime,
+        value: new Date(),
         valid: false
       },
       species: {
@@ -28,9 +29,9 @@ class SightingForm extends Component {
         value: '',
         valid: false
       }
-
     },
-    validSpecies: null
+    serverResponse: '',
+    formIsValid: false
   }
 
   dateTimeInputChangedHandler = (value) => {
@@ -50,15 +51,6 @@ class SightingForm extends Component {
     return isValid;
   }
 
-  checkSpeciesValidity(sighting) {
-    const sightingName = sighting;
-    const validSpecies = this.props.species;
-    console.log(validSpecies);
-    const isValid = validSpecies.reduce((current, next) => next.name === sightingName || current, false);
-
-    return isValid;
-  }
-
   speciesInputChangedHandler = (event) => {
     const updatedForm = {
       ...this.state.form
@@ -70,7 +62,61 @@ class SightingForm extends Component {
     this.setState({ form: updatedForm });
   }
 
+  checkSpeciesValidity(sighting) {
+    const sightingName = sighting;
+    const validSpecies = this.props.species;
+    const isValid = validSpecies.reduce((current, next) => next.name === sightingName || current, false);
+
+    return isValid;
+  }
+
+  countInputHandler = (event) => {
+    const updatedForm = {
+      ...this.state.form
+    }
+    const updatedCount = updatedForm.count;
+    updatedCount.value = event.target.value;
+    updatedCount.valid = updatedCount.value >= 1;
+    updatedForm.count = updatedCount;
+    this.setState({ form: updatedForm });
+  }
+
+  descriptionInputHandler = (event) => {
+    const updatedForm = {
+      ...this.state.form
+    }
+    const updatedDescription = updatedForm.description;
+    updatedDescription.value = event.target.value;
+    updatedDescription.valid = updatedDescription.value.length > 0;
+    updatedForm.description = updatedDescription;
+    this.setState({ form: updatedForm });
+  }
+
+  addSightingHandler = (event) => {
+    event.preventDefault();
+    const formData = {};
+    for (let formElement in this.state.form) {
+      formData[formElement] = this.state.form[formElement].value;
+    }
+
+    let formIsValid = true;
+    for (let formElement in this.state.form) {
+      formIsValid = this.state.form[formElement].valid && formIsValid;
+    }
+    this.setState({ formIsValid: formIsValid })
+
+    if (formIsValid) {
+      axios.post('/sightings', formData)
+        .then(response => {
+          this.setState({ serverResponse: response.data });
+        });
+      console.log(this.state.serverResponse)
+    }
+    console.log(formData)
+  }
+
   render() {
+    console.log(this.state)
     return (
       <div className="SightingForm">
         <Form>
@@ -96,16 +142,20 @@ class SightingForm extends Component {
             <Input
               id="count"
               required
-              type='number' />
+              type='number'
+              onChange={this.countInputHandler}
+              valid={this.state.form.count.valid} />
           </FormGroup>
           <FormGroup row>
             <Label for="description">Description</Label>
             <Input
               id="description"
               required
-              type='textarea' />
+              type='textarea'
+              onChange={this.descriptionInputHandler}
+              valid={this.state.form.description.valid} />
           </FormGroup>
-          <Button>Add sighting</Button>
+          <Button onClick={this.addSightingHandler}>Add sighting</Button>
         </Form>
       </div>
     );

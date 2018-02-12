@@ -25,7 +25,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.species)
     return (
       <div>
         <h3 className="App">
@@ -37,7 +36,7 @@ class App extends Component {
               <SightingsList sightings={this.state.sightings} />
             </Col>
             <Col sm="4">
-              <SightingForm species={this.state.species} dateTime={new Date()} />
+              <SightingForm species={this.state.species} />
             </Col>
           </Row>
         </Container>
