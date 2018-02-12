@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import SightingsList from './Components/SightingsList';
+import SightingsList from './Components/Sightings/SightingsList';
 import SightingForm from './Components/Form/SightingForm';
 import { Container, Row, Col } from 'reactstrap';
 
