@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button, FormFeedback, Jumbotron } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
@@ -15,7 +15,7 @@ class SightingForm extends Component {
     form: {
       dateTime: {
         value: new Date(),
-        valid: false
+        valid: true
       },
       species: {
         value: '',
@@ -110,7 +110,7 @@ class SightingForm extends Component {
         .then(response => {
           this.setState({ serverResponse: response.data });
         });
-    }
+    } 
   }
 
   render() {
