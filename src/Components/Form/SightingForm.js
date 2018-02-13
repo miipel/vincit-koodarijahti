@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import { Form, FormGroup, Button } from 'reactstrap';
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment';
-import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import axios from 'axios';
+import SightingInput from './SightingInput';
 
 import './SightingForm.css';
 
@@ -14,11 +14,15 @@ class SightingForm extends Component {
   state = {
     form: {
       dateTime: {
+        elementConfig: {
+          label: 'Date and time',
+          type: 'dateAndTime'
+        },
         value: null,
         valid: false
       },
       species: {
-        config: {
+        elementConfig: {
           label: 'Species',
           type: 'text'
         },
@@ -26,10 +30,18 @@ class SightingForm extends Component {
         valid: false
       },
       count: {
+        elementConfig: {
+          label: 'Count',
+          type: 'number'
+        },
         value: 0,
         valid: false
       },
       description: {
+        elementConfig: {
+          label: 'Description',
+          type: 'textarea'
+        },
         value: '',
         valid: false
       }
@@ -38,64 +50,51 @@ class SightingForm extends Component {
     formIsValid: false
   }
 
-  dateTimeInputChangedHandler = (value) => {
-    const updatedForm = {
-      ...this.state.form
+  check(value, rule) {
+    let isValid = false;
+
+    if (rule === 'dateTime') {
+      isValid = Moment(value).isValid();
     }
-    const updatedDateTime = updatedForm.dateTime;
-    updatedDateTime.value = value;
-    updatedDateTime.valid = this.checkDateTimeValidity(updatedDateTime.value);
-    updatedForm.dateTime = updatedDateTime;
-    this.setState({ form: updatedForm });
-  }
 
-  checkDateTimeValidity(dateTimeInput) {
-    const dateTime = dateTimeInput;
-    const isValid = Moment(dateTime).isValid();
-    return isValid;
-  }
-
-  speciesInputChangedHandler = (event) => {
-    const updatedForm = {
-      ...this.state.form
+    if (rule === 'species') {
+      const sightingName = value;
+      const validSpecies = this.props.species;
+      isValid = validSpecies.reduce((current, next) => next.name === sightingName || current, false);
     }
-    const updatedSpecies = updatedForm.species;
-    updatedSpecies.value = event.target.value;
-    updatedSpecies.valid = this.checkSpeciesValidity(updatedSpecies.value);
-    updatedForm.species = updatedSpecies;
-    this.setState({ form: updatedForm });
-  }
 
-  checkSpeciesValidity(sighting) {
-    const sightingName = sighting;
-    const validSpecies = this.props.species;
-    const isValid = validSpecies.reduce((current, next) => next.name === sightingName || current, false);
+    if (rule === 'count') {
+      isValid = value >= 1;
+    }
+
+    if (rule === 'description') {
+      isValid = value.length > 0
+    }
 
     return isValid;
   }
 
-  countInputHandler = (event) => {
+  inputChangedHandler = (event, inputIdentifier) => {
     const updatedForm = {
       ...this.state.form
     }
-    const updatedCount = updatedForm.count;
-    updatedCount.value = event.target.value;
-    updatedCount.valid = updatedCount.value >= 1;
-    updatedForm.count = updatedCount;
-    this.setState({ form: updatedForm });
-  }
-
-  descriptionInputHandler = (event) => {
-    const updatedForm = {
-      ...this.state.form
+    const updatedFormElement = {
+      ...updatedForm[inputIdentifier]
     }
-    const updatedDescription = updatedForm.description;
-    updatedDescription.value = event.target.value;
-    updatedDescription.valid = updatedDescription.value.length > 0;
-    updatedForm.description = updatedDescription;
-    this.setState({ form: updatedForm });
-  }
+    if (inputIdentifier === 'dateTime') {
+      updatedFormElement.value = event;
+    } else {
+      updatedFormElement.value = event.target.value;
+    }
+    updatedFormElement.valid = this.check(updatedFormElement.value, inputIdentifier);
+    updatedForm[inputIdentifier] = updatedFormElement;
 
+    let formIsValid = true;
+    for (let inputIdentifier in updatedForm) {
+      formIsValid = updatedForm[inputIdentifier].valid && formIsValid;
+    }
+    this.setState({ form: updatedForm, formIsValid: formIsValid });
+  }
 
   addSightingHandler = (event) => {
     const formData = {};
@@ -103,69 +102,43 @@ class SightingForm extends Component {
       formData[formElement] = this.state.form[formElement].value;
     }
 
-    let formIsValid = true;
-    for (let formElement in this.state.form) {
-      formIsValid = this.state.form[formElement].valid && formIsValid;
-    }
-    this.setState({ formIsValid: formIsValid })
-
-    if (formIsValid) {
-      axios.post('/sightings', formData)
-        .then(response => {
-          this.setState({ serverResponse: response.data });
-        });
-    }
+    axios.post('/sightings', formData)
+      .then(response => {
+        this.setState({ serverResponse: response.data });
+      });
   }
 
   render() {
-    console.log(this.state.form)
+    const formElementsArray = [];
+    for (let key in this.state.form) {
+      formElementsArray.push({
+        id: key,
+        singleElement: this.state.form[key]
+      });
+    }
+    let form = (
+      <Form onSubmit={this.addSightingHandler} >
+        <h3>
+          Add new sighting
+        </h3>
+        <FormGroup row>
+          {formElementsArray.map(formElement => (
+            <SightingInput
+              key={formElement.id}
+              label={formElement.singleElement.elementConfig.label}
+              value={formElement.singleElement.elementConfig.value}
+              type={formElement.singleElement.elementConfig.type}
+              changed={(event) => { this.inputChangedHandler(event, formElement.id) }}
+              valid={formElement.singleElement.valid} />
+          ))}
+        </FormGroup>
+        <Button disabled={!this.state.formIsValid}>Add sighting</Button>
+      </Form>
+    );
+
     return (
-      <div className="SightingForm">
-        <Form onSubmit={this.addSightingHandler}>
-          <h3>
-            Add new sighting
-          </h3>
-          <FormGroup row>
-            <Label for="dateAndTime">Date and time</Label>
-            <DateTimePicker
-              id="dateAndTime"
-              defaultValue={new Date()}
-              value={this.state.form.dateTime.value}
-              onChange={value => this.dateTimeInputChangedHandler(value)}
-              valid={this.state.form.dateTime.valid}
-              required />
-          </FormGroup>
-          <FormGroup row>
-            <Label for="species">Species</Label>
-            <Input
-              id="species"
-              placeholder="Enter species name"
-              required
-              type='text'
-              onChange={this.speciesInputChangedHandler}
-              valid={this.state.form.species.valid} />
-            <FormFeedback>Does not match any species!</FormFeedback>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="count">Count</Label>
-            <Input
-              id="count"
-              required
-              type='number'
-              onChange={this.countInputHandler}
-              valid={this.state.form.count.valid} />
-          </FormGroup>
-          <FormGroup row>
-            <Label for="description">Description</Label>
-            <Input
-              id="description"
-              required
-              type='textarea'
-              onChange={this.descriptionInputHandler}
-              valid={this.state.form.description.valid} />
-          </FormGroup>
-          <Button disabled={!this.state.formIsValid}>Add sighting</Button>
-        </Form>
+      <div>
+        {form}
       </div>
     );
   }
