@@ -14,10 +14,14 @@ class SightingForm extends Component {
   state = {
     form: {
       dateTime: {
-        value: new Date(),
-        valid: true
+        value: null,
+        valid: false
       },
       species: {
+        config: {
+          label: 'Species',
+          type: 'text'
+        },
         value: '',
         valid: false
       },
@@ -110,10 +114,11 @@ class SightingForm extends Component {
         .then(response => {
           this.setState({ serverResponse: response.data });
         });
-    } 
+    }
   }
 
   render() {
+    console.log(this.state.form)
     return (
       <div className="SightingForm">
         <Form onSubmit={this.addSightingHandler}>
@@ -124,13 +129,17 @@ class SightingForm extends Component {
             <Label for="dateAndTime">Date and time</Label>
             <DateTimePicker
               id="dateAndTime"
+              defaultValue={new Date()}
               value={this.state.form.dateTime.value}
-              onChange={value => this.dateTimeInputChangedHandler(value)} />
+              onChange={value => this.dateTimeInputChangedHandler(value)}
+              valid={this.state.form.dateTime.valid}
+              required />
           </FormGroup>
           <FormGroup row>
             <Label for="species">Species</Label>
             <Input
               id="species"
+              placeholder="Enter species name"
               required
               type='text'
               onChange={this.speciesInputChangedHandler}
@@ -155,7 +164,7 @@ class SightingForm extends Component {
               onChange={this.descriptionInputHandler}
               valid={this.state.form.description.valid} />
           </FormGroup>
-          <Button>Add sighting</Button>
+          <Button disabled={!this.state.formIsValid}>Add sighting</Button>
         </Form>
       </div>
     );
