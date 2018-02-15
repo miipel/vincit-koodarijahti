@@ -11,7 +11,7 @@ class SightingsList extends Component {
 
     sortDate(a, b, newest) {
         const arg1 = new Date(a.dateTime),
-              arg2 = new Date(b.dateTime);
+            arg2 = new Date(b.dateTime);
         if (newest) {
             return arg2 - arg1;
         } else {
@@ -23,11 +23,11 @@ class SightingsList extends Component {
         const sightings = this.props.sightings.sort(
             (a, b) => this.sortDate(a, b, this.state.newestIsFirst)
         )
-        .map((sighting, id) => {
-            return <Sighting
-                key={id}
-                sighting={sighting} />
-        });
+            .map((sighting, id) => {
+                return <Sighting
+                    key={id}
+                    sighting={sighting} />
+            });
 
         return (
             <div className="SightingsList">

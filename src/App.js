@@ -25,8 +25,6 @@ class App extends Component {
   }
 
   render() {
-
-
     return (
       <div>
 
@@ -39,7 +37,7 @@ class App extends Component {
         <Container>
           <Row>
             <Col xs="12" sm="8">
-              <SightingsList sightings={this.state.sightings} sortByNewest={this.state.newestIsFirst}/>
+              <SightingsList sightings={this.state.sightings} />
             </Col>
             <Col sm="4">
               <SightingForm species={this.state.species} />

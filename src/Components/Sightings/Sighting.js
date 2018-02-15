@@ -6,7 +6,7 @@ Moment.locale('fi');
 momentLocalizer();
 
 const sighting = (props) => {
-    
+
     const sighting = props.sighting;
     const dateTime = Moment(sighting.dateTime).format('lll');
     return (
