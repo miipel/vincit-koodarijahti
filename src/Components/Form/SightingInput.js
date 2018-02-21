@@ -1,6 +1,10 @@
 import React from 'react';
 import { Label, Input } from 'reactstrap';
-import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import { DateTimePicker, DropdownList } from 'react-widgets';
+
+import './SightingInput.css';
+import 'react-widgets/dist/css/react-widgets.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const sightingInput = (props) => {
   let inputElement = null;
@@ -8,22 +12,19 @@ const sightingInput = (props) => {
   switch (props.type) {
     case ('dateAndTime'):
       inputElement = <DateTimePicker
-        required
         onChange={props.changed}
         value={props.value}
         valid={props.valid} />
       break;
-    case ('text'):
-      inputElement = <Input
-        required
-        type='text'
+    case ('dropDown'):
+      inputElement = <DropdownList
+        data={props.species}
         onChange={props.changed}
         value={props.value}
         valid={props.valid} />
       break;
     case ('number'):
       inputElement = <Input
-        required
         type='number'
         onChange={props.changed}
         value={props.value}
@@ -31,7 +32,6 @@ const sightingInput = (props) => {
       break;
     case ('textarea'):
       inputElement = <Input
-        required
         type='textarea'
         onChange={props.changed}
         value={props.value}
@@ -43,7 +43,7 @@ const sightingInput = (props) => {
   }
 
   return (
-    <div>
+    <div className="input">
       <Label>{props.label}</Label>
       {inputElement}
     </div>

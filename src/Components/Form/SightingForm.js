@@ -6,6 +6,8 @@ import axios from 'axios';
 import SightingInput from './SightingInput';
 
 import './SightingForm.css';
+import 'react-widgets/dist/css/react-widgets.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 Moment.locale('fi');
 momentLocalizer();
@@ -24,9 +26,9 @@ class SightingForm extends Component {
       species: {
         elementConfig: {
           label: 'Species',
-          type: 'text'
+          type: 'dropDown'
         },
-        value: '',
+        value: null,
         valid: false
       },
       count: {
@@ -48,6 +50,10 @@ class SightingForm extends Component {
     },
     serverResponse: '',
     formIsValid: false
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.form)
   }
 
   check(value, rule) {
@@ -81,7 +87,7 @@ class SightingForm extends Component {
     const updatedFormElement = {
       ...updatedForm[inputIdentifier]
     }
-    if (inputIdentifier === 'dateTime') {
+    if (inputIdentifier === 'dateTime' || inputIdentifier === 'species') {
       updatedFormElement.value = event;
     } else {
       updatedFormElement.value = event.target.value;
@@ -116,6 +122,9 @@ class SightingForm extends Component {
         singleElement: this.state.form[key]
       });
     }
+
+    const possibleSpecies = this.props.species.map(species => species.name)
+
     let form = (
       <Form onSubmit={this.addSightingHandler} >
         <h3>
@@ -129,7 +138,8 @@ class SightingForm extends Component {
               value={formElement.singleElement.elementConfig.value}
               type={formElement.singleElement.elementConfig.type}
               changed={(event) => { this.inputChangedHandler(event, formElement.id) }}
-              valid={formElement.singleElement.valid} />
+              valid={formElement.singleElement.valid}
+              species={possibleSpecies} />
           ))}
         </FormGroup>
         <Button disabled={!this.state.formIsValid}>Add sighting</Button>
@@ -137,7 +147,7 @@ class SightingForm extends Component {
     );
 
     return (
-      <div>
+      <div className="form">
         {form}
       </div>
     );

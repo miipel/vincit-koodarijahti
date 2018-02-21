@@ -1,0 +1,8 @@
+.input {
+  flex: 0 0 300px;
+  display: block;
+}
+
+.dateTimePicker {
+  display: flex;
+}
